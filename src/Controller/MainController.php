@@ -17,6 +17,7 @@ class MainController extends AbstractController
      */
     public function home(): Response
     {
+        dump('bonjour');
         $movieModel = new Movie();
         $movies = $movieModel->getAllMovies();
         return $this->render('main/index.html.twig', [

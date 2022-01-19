@@ -55,18 +55,13 @@
                         <small>{{movie.summary}}</small>
                     </p>
                     <div class="d-flex" style="color: orange;">
-                    {% for i in range(0, 5) %}
-                        {% if i <= movie.rating|round(0, 'floor') %}
+                    {% for i in range(0, 4) %}
+                        {% if movie.rating - i > 0.71 %}
                             <i class="bi bi-star-fill"></i>
-                        {% endif %}
-                        {% if i == (movie.rating|round(0, 'floor') + 1) %}
-                            {% if movie.rating - movie.rating|round(0, 'floor') <= 0.2  %}
-                                <i class="bi bi-star"></i>
-                            {% elseif movie.rating - movie.rating|round(0, 'floor') >= 0.8  %}
-                                <i class="bi bi-star-fill"></i>
-                            {% else %}
-                                <i class="bi bi-star-half"></i>
-                            {% endif %}
+                        {% elseif movie.rating - i < 0.29 %}
+                            <i class="bi bi-star"></i>
+                        {% else %}
+                            <i class="bi bi-star-half"></i>
                         {% endif %}
                     {% endfor %}
                         <span class="ps-1">{{movie.rating}}</span>
