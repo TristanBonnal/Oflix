@@ -38,7 +38,6 @@ class MainController extends AbstractController
      */
     public function themeSwitcher(SessionInterface $session, Request $request): Response
     {
-        // dd($request);
 
         $theme = $session->get('theme', 'netflix');
 

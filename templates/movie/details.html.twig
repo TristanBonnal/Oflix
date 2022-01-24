@@ -7,10 +7,8 @@
             <div class="col">
                 <div
                     class="row g-0 borderrr rrrounded overflow-hidden flex-md-row align-items-start mb-4 shadow-smmm position-relative">
-                    <div class="col-4 movie__poster img-thumbnail"
-                        style="background-image: url(https://m.media-amazon.com/images/M/MV5BNThmZGY4NzgtMTM4OC00NzNkLWEwNmEtMjdhMGY5YTc1NDE4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg);">
+                    <div class="col-4 movie__poster img-thumbnail">
                         <img src="{{movie.poster}}" class="img-fluid">
-                        <!-- img src="https://m.media-amazon.com/images/M/MV5BNThmZGY4NzgtMTM4OC00NzNkLWEwNmEtMjdhMGY5YTc1NDE4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg" class="img-fluid" -->
                     </div>
 
                     <div class="col-8 p-4 d-flex flex-column position-static bg-light">
@@ -19,32 +17,31 @@
                         <h3 class="mb-1">{{movie.title}}</h3>
                         <div class="mb-1 text-muted">{{movie.duration}} min</div>
                         <p>
-                            <span class="badge bg-warning text-dark">Animation</span>
-                            <span class="badge bg-warning text-dark">Aventure</span>
-                            <span class="badge bg-warning text-dark">Comédie</span>
-                            <span class="badge bg-warning text-dark">Famille</span>
+                            {% for genre in movie.genres %}
+                                <span class="badge bg-warning text-dark">{{ genre.name }}</span>
+                            {% endfor %}
                         </p>
                         <p>
                             {{movie.synopsis}}
                         </p>
                         <div class="d-flex mb-4" style="color: orange;">
-{% for i in range(0, 4) %}
-    {% if movie.rating - i > 0.71 %}
-        <i class="bi bi-star-fill"></i>
-    {% elseif movie.rating - i < 0.29 %}
-        <i class="bi bi-star"></i>
-    {% else %}
-        <i class="bi bi-star-half"></i>
-    {% endif %}
-{% endfor %}
+                            {% for i in range(0, 4) %}
+                                {% if movie.rating - i > 0.71 %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% elseif movie.rating - i < 0.29 %}
+                                    <i class="bi bi-star"></i>
+                                {% else %}
+                                    <i class="bi bi-star-half"></i>
+                                {% endif %}
+                            {% endfor %}
                             <span class="ps-1">{{movie.rating}}</span>
                         </div>
 
                         <h2>3 Saisons</h2>
-                        <ul class="list-unstyled">
-                            <li><span class="badge bg-danger fs-6 mb-2">Saison 1</span><small class="ms-1">(10 épisodes)</small></li>
-                            <li><span class="badge bg-danger fs-6 mb-2">Saison 2</span><small class="ms-1">(11 épisodes)</small></li>
-                            <li><span class="badge bg-danger fs-6 mb-2">Saison 3</span><small class="ms-1">(12 épisodes)</small></li>
+                            <ul class="list-unstyled">
+                            {% for season in movie.seasons %}
+                                <li><span class="badge bg-danger fs-6 mb-2">Saison {{ season.number }}</span> <small class="ms-1">({{ season.episodesNumber }} épisodes)</small></li>
+                            {% endfor %}
                         </ul>
 
                         <dl class="row">
@@ -57,7 +54,7 @@
                             <dt class="col-sm-12">Pays</dt>
                             <dd class="col-sm-12">USA</dd>
                             <dt class="col-sm-12">Année</dt>
-                            <dd class="col-sm-12">{{movie.release_date}}</dd>
+                            <dd class="col-sm-12">{{movie.releasedate|date('Y')}}</dd>
                         </dl>
 
                     </div>
