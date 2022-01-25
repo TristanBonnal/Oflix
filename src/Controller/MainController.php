@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Models\Movie;
+use App\Repository\GenreRepository;
+use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,14 +20,14 @@ class MainController extends AbstractController
 
      * @return Response
      */
-    public function home(): Response
+    public function home(MovieRepository $repoMovie, GenreRepository $repoGenre): Response
     {
-        dump('bonjour');
-        $movieModel = new Movie();
-        $movies = $movieModel->getAllMovies();
+        $movies = $repoMovie->findAll();
+        $genres = $repoGenre->findAll();
         return $this->render('main/index.html.twig', [
             'title' => 'Oflix',
-            'movies' => $movies
+            'movies' => $movies,
+            'genres' => $genres
         ]);
     }
     

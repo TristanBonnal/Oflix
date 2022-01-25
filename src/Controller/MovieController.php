@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Repository\CastingRepository;
 use App\Repository\MovieRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,13 +16,17 @@ class MovieController extends AbstractController
     /**
      * @Route("/movie/{id}", name="movie", requirements={"id": "\d+"})
      */
-    public function show(MovieRepository $movieRepos, int $id): Response
+    public function show(MovieRepository $movieRepos, CastingRepository $castingRepo, int $id): Response
     {
         $movie = $movieRepos->find($id);
+        $castings = $castingRepo->findBy(['movie' => $id], ['creditOrder' => 'DESC']);
+
+        // dd($castings);
 
         return $this->render('movie/details.html.twig', [
             'title' => $movie->getTitle(),
             'movie' => $movie,
+            'castings' => $castings
         ]);
     }
 
