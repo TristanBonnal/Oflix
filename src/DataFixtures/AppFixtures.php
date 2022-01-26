@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Actor;
+use App\Entity\Casting;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Season;
@@ -31,13 +32,26 @@ class AppFixtures extends Fixture
             'Peplum',
             'Erotique',
         ];
+        $genresObjects = [];
         foreach ($genres as $genre) {
             $newGenre = new Genre;
             $newGenre->setName($genre);
+            $genresObjects[] = $newGenre;
             $manager->persist($newGenre);
         }
 
-        for ($i = 1; $i<= 1; $i++) {
+        //Actor
+        $actors = [];
+        for ($i = 1; $i<= 50; $i++) {
+            $newActor = new Actor;
+            $newActor->setFirstname($faker->firstName())
+                        ->setLastname($faker->lastName());
+            $actors[] = $newActor;
+            
+            $manager->persist($newActor);
+        }
+
+        for ($i = 1; $i<= 20; $i++) {
             //Movies
             $newMovie =  new Movie();
             $newMovie->setTitle(ucfirst($faker->word()));
@@ -49,10 +63,11 @@ class AppFixtures extends Fixture
             $newMovie->setSummary($faker->paragraph(1));
             $newMovie->setSynopsis($faker->paragraph(3));
             $newMovie->setPoster('https://picsum.photos/id/'.mt_rand(1, 100).'/303/424');
-            for ($i = 1; $i <= mt_rand(1, 2); $i++) {
-                $genreToAdd = new Genre;
-                $genreToAdd->setName($genres[mt_rand(0, 12)]);
-                $newMovie->addGenre($genreToAdd);
+
+            //Addgenres
+            $nbGenres = rand(0,3);
+            for ($j = 1; $j <= $nbGenres; $j++) {
+                $newMovie->addGenre($genresObjects[mt_rand(0, 12)]);
             }
 
             //Seasons 
@@ -70,20 +85,23 @@ class AppFixtures extends Fixture
                     $newMovie->addSeason($newSeason);
                 }
             }
-            $manager->persist($newMovie);
-        }
+
+            //Casting
+            $nbCastings = rand(1, 5);
+            for ($k = 1; $k<= $nbCastings; $k++) {
+                $actorCasted = $actors[mt_rand(0,12)];
+                $newCasting = new Casting;
+                $newCasting->setRole($faker->firstName())
+                            ->setMovie($newMovie)
+                            ->setActor($actorCasted)
+                            ->setCreditOrder(mt_rand(1,5));
+                
+                $manager->persist($newCasting);
+            }
 
 
-
-        //Actor
-        for ($i = 1; $i<= 10; $i++) {
-            $newActor = new Actor;
-
-            $newActor->setFirstname($faker->firstName())
-                     ->setLastname($faker->lastName());
-
-            $manager->persist($newActor);
-        }
+                $manager->persist($newMovie);
+            }
 
         $manager->flush();
     }
