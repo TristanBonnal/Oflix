@@ -16,12 +16,11 @@ class MovieController extends AbstractController
     /**
      * @Route("/movie/{id}", name="movie", requirements={"id": "\d+"})
      */
-    public function show(MovieRepository $movieRepos, CastingRepository $castingRepo, int $id): Response
+    public function show(MovieRepository $movieRepo, CastingRepository $castingRepo, int $id): Response
     {
-        $movie = $movieRepos->find($id);
+        $movie = $movieRepo->find($id);
         $castings = $castingRepo->findBy(['movie' => $id], ['creditOrder' => 'DESC']);
 
-        // dd($castings);
 
         return $this->render('movie/details.html.twig', [
             'title' => $movie->getTitle(),
