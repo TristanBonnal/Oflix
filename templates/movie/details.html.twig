@@ -59,7 +59,7 @@
                             <dd class="col-sm-12">{{movie.releasedate|date('Y')}}</dd>
                         </dl>
                         <div>
-                            <a class="btn btn-warning">Ajouter une critique</a>
+                            <a href="{{path('review_new', {id: movie.id})}}" class="btn btn-warning">Ajouter une critique</a>
                         </div>
 
                     </div>
