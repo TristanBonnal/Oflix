@@ -2,21 +2,49 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Provider\OflixProvider;
 use App\Entity\Actor;
 use App\Entity\Casting;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Season;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
+    private $connexion;
+
+    public function __construct(Connection $connexion)
+    {
+        $this->connexion = $connexion;
+    }
+
+    public function truncate()
+    {
+        // On désactive la vérification des FK
+        // Sinon les truncate ne fonctionnent pas.
+        $this->connexion->executeQuery('SET foreign_key_checks = 0');
+
+        //
+        $this->connexion->executeQuery('TRUNCATE TABLE casting');
+        $this->connexion->executeQuery('TRUNCATE TABLE genre');
+        $this->connexion->executeQuery('TRUNCATE TABLE movie');
+        $this->connexion->executeQuery('TRUNCATE TABLE movie_genre');
+        $this->connexion->executeQuery('TRUNCATE TABLE actor');
+        $this->connexion->executeQuery('TRUNCATE TABLE season');
+
+    }
+
     public function load(ObjectManager $manager): void
     {
+        $this->truncate();
+
         $faker = Factory::create('fr_FR');
-        //Genre
+        $oflixProvider = new OflixProvider();
+        //Genres
         $genres = [
             'Action',
             'Aventure',
@@ -30,7 +58,6 @@ class AppFixtures extends Fixture
             'Documentaire',
             'Animé',
             'Peplum',
-            'Erotique',
         ];
         $genresObjects = [];
         foreach ($genres as $genre) {
@@ -40,12 +67,12 @@ class AppFixtures extends Fixture
             $manager->persist($newGenre);
         }
 
-        //Actor
+        //Actors
         $actors = [];
         for ($i = 1; $i<= 50; $i++) {
             $newActor = new Actor;
             $newActor->setFirstname($faker->firstName())
-                        ->setLastname($faker->lastName());
+                     ->setLastname($faker->lastName());
             $actors[] = $newActor;
             
             $manager->persist($newActor);
@@ -54,7 +81,7 @@ class AppFixtures extends Fixture
         for ($i = 1; $i<= 20; $i++) {
             //Movies
             $newMovie =  new Movie();
-            $newMovie->setTitle(ucfirst($faker->word()));
+            $newMovie->setTitle(ucfirst($oflixProvider->movieTitle()));
             $newMovie->setDuration(rand(30, 180));
             $newMovie->setRating(mt_rand(0, 50) / 10);
             $type = rand(1, 2) == 1 ? 'Film' : 'Série';
@@ -67,7 +94,7 @@ class AppFixtures extends Fixture
             //Addgenres
             $nbGenres = rand(0,3);
             for ($j = 1; $j <= $nbGenres; $j++) {
-                $newMovie->addGenre($genresObjects[mt_rand(0, 12)]);
+                $newMovie->addGenre($genresObjects[mt_rand(0, 11)]);
             }
 
             //Seasons 
@@ -87,7 +114,7 @@ class AppFixtures extends Fixture
             }
 
             //Casting
-            $nbCastings = rand(1, 5);
+            $nbCastings = rand(1, 7);
             for ($k = 1; $k<= $nbCastings; $k++) {
                 $actorCasted = $actors[mt_rand(0,12)];
                 $newCasting = new Casting;
