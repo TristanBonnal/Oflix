@@ -47,7 +47,11 @@ class ReviewType extends AbstractType
 
             ])
             ->add('watchedAt', DateType::class, ['label' => 'Vu le :'])
-            ->add('Poster', SubmitType::class)
+            ->add('Poster', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-warning'
+                ]
+            ])
         ;
     }
 

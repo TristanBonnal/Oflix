@@ -43,7 +43,7 @@ class Review
     private $reactions = [];
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
     private $watchedAt;
 
@@ -117,12 +117,12 @@ class Review
         return $this;
     }
 
-    public function getWatchedAt(): ?\DateTimeImmutable
+    public function getWatchedAt(): ?\DateTime
     {
         return $this->watchedAt;
     }
 
-    public function setWatchedAt(\DateTimeImmutable $watchedAt): self
+    public function setWatchedAt(\DateTime $watchedAt): self
     {
         $this->watchedAt = $watchedAt;
 
