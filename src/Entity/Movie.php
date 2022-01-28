@@ -74,6 +74,11 @@ class Movie
      */
     private $castings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="movie", orphanRemoval=true)
+     */
+    private $reviews;
+
 
 
 
@@ -82,6 +87,7 @@ class Movie
         $this->seasons = new ArrayCollection();
         $this->genres = new ArrayCollection();
         $this->castings = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -263,6 +269,36 @@ class Movie
             // set the owning side to null (unless already changed)
             if ($casting->getMovie() === $this) {
                 $casting->setMovie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getMovie() === $this) {
+                $review->setMovie(null);
             }
         }
 

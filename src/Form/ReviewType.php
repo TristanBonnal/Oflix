@@ -36,11 +36,11 @@ class ReviewType extends AbstractType
             ->add('reactions', ChoiceType::class, [
                 'label' => 'Ce film vous a fait...',  
                 'choices'  => [
-                    'Rire' => 'smile',
-                    'Pleurer' => 'cry',
-                    'Réfléchir' => 'think',
-                    'Dormir' => 'sleep',
-                    'Rêver' => 'dream',
+                    'Rire' => 'Rire',
+                    'Pleurer' => 'Pleurer',
+                    'Réfléchir' => 'Réfléchir',
+                    'Dormir' => 'Dormir',
+                    'Rêver' => 'Rêver',
                 ],
                 'expanded' => true,
                 'multiple' => true,

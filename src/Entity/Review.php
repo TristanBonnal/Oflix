@@ -59,7 +59,8 @@ class Review
     private $watchedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Movie::class)
+     * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="reviews")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $movie;
 
@@ -151,4 +152,5 @@ class Review
 
         return $this;
     }
+
 }

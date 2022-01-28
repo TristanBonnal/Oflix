@@ -61,14 +61,45 @@
                         <div>
                             <a href="{{path('review_new', {id: movie.id})}}" class="btn btn-warning">Ajouter une critique</a>
                         </div>
-
                     </div>
                 </div>
-
+                <div>
+                <h3>Avis Spectateurs</h3>
+                {% for review in movie.reviews %}
+                    <div class="card my-3">
+                        <div class="card-header">
+                            {{review.username}} 
+                            <small>visioné le {{review.watchedAt|date('d/m/Y')}}</small>
+                            <div class="d-flex" style="color: orange;">
+                                {% for i in range(0, 4) %}
+                                    {% if review.rating - i > 0.71 %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% elseif review.rating - i < 0.29 %}
+                                        <i class="bi bi-star"></i>
+                                    {% else %}
+                                        <i class="bi bi-star-half"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ps-1">{{review.rating}}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{review.content}}</p>
+                            <div>
+                                <h6><em>Réactions/émotions</em></h6>
+                                <ul>
+                                    {% for reaction in review.reactions %}
+                                        <li>{{reaction}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}
