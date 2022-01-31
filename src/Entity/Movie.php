@@ -26,6 +26,7 @@ class Movie
 
     /**
      * @ORM\Column(type="date")
+     * TODO ASSERT
      */
     private $release_date;
 

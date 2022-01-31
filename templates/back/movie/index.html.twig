@@ -3,47 +3,40 @@
 {% block title %}Movie index{% endblock %}
 
 {% block body %}
-    <h1>Movie index</h1>
+    <div class="container bg-lighttt pt-3">
+        <h1>Liste des films</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Release_date</th>
-                <th>Duration</th>
-                <th>Type</th>
-                <th>Synopsis</th>
-                <th>Summary</th>
-                <th>Rating</th>
-                <th>Poster</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for movie in movies %}
-            <tr>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.title }}</td>
-                <td>{{ movie.releaseDate ? movie.releaseDate|date('Y-m-d') : '' }}</td>
-                <td>{{ movie.duration }}</td>
-                <td>{{ movie.type }}</td>
-                <td>{{ movie.synopsis }}</td>
-                <td>{{ movie.summary }}</td>
-                <td>{{ movie.rating }}</td>
-                <td>{{ movie.poster }}</td>
-                <td>
-                    <a href="{{ path('back_movie_show', {'id': movie.id}) }}">show</a>
-                    <a href="{{ path('back_movie_edit', {'id': movie.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <a href="{{ path('back_movie_new') }}" class="btn btn-warning"><i class="bi bi-file-plus">  Ajouter un film</i></a>
 
-    <a href="{{ path('back_movie_new') }}">Create new</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titre</th>
+                    <th>Date de sortie</th>
+                    <th>Durée</th>
+                    <th>Format</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for movie in movies %}
+                <tr>
+                    <td>{{ movie.id }}</td>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.releaseDate ? movie.releaseDate|date('Y-m-d') : '' }}</td>
+                    <td>{{ movie.duration }}</td>
+                    <td>{{ movie.type }}</td>
+                    <td>{{ movie.rating }}</td>
+                    <td><a href="{{ path('back_movie_show', {'id': movie.id}) }}" class="btn btn-outline-dark"><i class="bi bi-eye"> Voir</i></a></td>
+                    <td><a href="{{ path('back_movie_edit', {'id': movie.id}) }}" class="btn btn-outline-danger"><i class="bi bi-pencil"> Editer</i></a></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">Aucun film trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

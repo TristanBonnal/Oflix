@@ -1,54 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Movie{% endblock %}
-
 {% block body %}
-    <h1>Movie</h1>
+    <!-- main -->
+    <div class="container bg-lighttt pt-5">
+        <div class="row mb-2">
+            <div class="col">
+                <div
+                    class="row g-0 borderrr rrrounded overflow-hidden flex-md-row align-items-start mb-4 shadow-smmm position-relative">
+                    <div class="col-4 movie__poster img-thumbnail">
+                        <img src="{{movie.poster}}" class="img-fluid">
+                    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ movie.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ movie.title }}</td>
-            </tr>
-            <tr>
-                <th>Release_date</th>
-                <td>{{ movie.releaseDate ? movie.releaseDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Duration</th>
-                <td>{{ movie.duration }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ movie.type }}</td>
-            </tr>
-            <tr>
-                <th>Synopsis</th>
-                <td>{{ movie.synopsis }}</td>
-            </tr>
-            <tr>
-                <th>Summary</th>
-                <td>{{ movie.summary }}</td>
-            </tr>
-            <tr>
-                <th>Rating</th>
-                <td>{{ movie.rating }}</td>
-            </tr>
-            <tr>
-                <th>Poster</th>
-                <td>{{ movie.poster }}</td>
-            </tr>
-        </tbody>
-    </table>
+                    <div class="col-8 p-4 d-flex flex-column position-static bg-light">
+                        <strong class="d-inline-block mb-2 text-primary">{{movie.type}}</strong>
+                        <h3 class="mb-1">{{movie.title}}</h3>
+                        <div class="mb-1 text-muted">{{movie.duration}} min</div>
+                        <p>
+                            {% for genre in movie.genres %}
+                                <span class="badge bg-warning text-dark">{{ genre.name }}</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{movie.synopsis}}
+                        </p>
+                        <div class="d-flex mb-4" style="color: orange;">
+                            {% for i in range(0, 4) %}
+                                {% if movie.rating - i > 0.71 %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% elseif movie.rating - i < 0.29 %}
+                                    <i class="bi bi-star"></i>
+                                {% else %}
+                                    <i class="bi bi-star-half"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ps-1">{{movie.rating}}</span>
+                        </div>
 
-    <a href="{{ path('back_movie_index') }}">back to list</a>
+                        <h2>3 Saisons</h2>
+                            <ul class="list-unstyled">
+                            {% for season in movie.seasons %}
+                                <li><span class="badge bg-danger fs-6 mb-2">Saison {{ season.number }}</span> <small class="ms-1">({{ season.episodesNumber }} épisodes)</small></li>
+                            {% endfor %}
+                        </ul>
 
-    <a href="{{ path('back_movie_edit', {'id': movie.id}) }}">edit</a>
+                        <dl class="row">
+                            <dt class="col-sm-12">Avec</dt>
+                            <dd class="col-sm-12">
+                            {% for casting in movie.castings %}
+                                {{casting.actor.firstname}} {{casting.actor.lastname}} ({{casting.role}})<br>
+                            {% else %}
+                            Pas d'acteurs
+                            {% endfor %}
+                            </dd>
+                            <dt class="col-sm-12">Pays</dt>
+                            <dd class="col-sm-12">USA</dd>
+                            <dt class="col-sm-12">Année</dt>
+                            <dd class="col-sm-12">{{movie.releasedate|date('Y')}}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <a href="{{ path('back_movie_index') }} " class="btn btn-outline-dark"><i class="bi bi-arrow-return-left"></i> Retour à la liste</a>
+                    <a href="{{ path('back_movie_edit', {'id': movie.id}) }}" class="btn btn-dark"><i class="bi bi-pencil"></i> Modifier</a>
+                </div>
+                {{ include('back/movie/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 
-    {{ include('back/movie/_delete_form.html.twig') }}
 {% endblock %}

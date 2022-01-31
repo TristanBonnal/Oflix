@@ -3,9 +3,11 @@
 {% block title %}New Movie{% endblock %}
 
 {% block body %}
-    <h1>Create new Movie</h1>
+<div class="container bg-lighttt pt-5">
+    <h1>Ajouter un film</h1>
 
     {{ include('back/movie/_form.html.twig') }}
 
-    <a href="{{ path('back_movie_index') }}">back to list</a>
+    <a href="{{ path('back_movie_index') }} " class="btn btn-outline-dark mb-2"><i class="bi bi-arrow-return-left"></i> Retour à la liste</a>
+</div>
 {% endblock %}

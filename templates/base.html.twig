@@ -17,7 +17,7 @@
         <!-- favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/favicon.png') }}" type="image/x-icon">
 
-        <title>{% block title %}{{title}}{% endblock %}</title>
+        <title>{% block title %}{{title ?? 'Oflix'}}{% endblock %}</title>
         
     </head>
     <body>
@@ -46,6 +46,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{path('main_home')}}"><i class="bi bi-bookmark"></i> Ma liste</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{path('back_movie_index')}}"><i class="bi bi-person-circle"></i> Admin</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
