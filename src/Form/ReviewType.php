@@ -36,7 +36,7 @@ class ReviewType extends AbstractType
             ->add('reactions', ChoiceType::class, [
                 'label' => 'Ce film vous a fait...',  
                 'choices'  => [
-                    'Rire' => 'Rire',
+                    'Rire' => 'smile',
                     'Pleurer' => 'Pleurer',
                     'Réfléchir' => 'Réfléchir',
                     'Dormir' => 'Dormir',
@@ -46,7 +46,11 @@ class ReviewType extends AbstractType
                 'multiple' => true,
 
             ])
-            ->add('watchedAt', DateType::class, ['label' => 'Vu le :'])
+            ->add('watchedAt', DateType::class, [
+                'label' => 'Vu le :',
+                'widget' => 'single_text',
+
+                ])
             ->add('Poster', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-warning'

@@ -76,6 +76,7 @@ class Movie
 
     /**
      * @ORM\OneToMany(targetEntity=Review::class, mappedBy="movie", orphanRemoval=true)
+     * @ORM\OrderBy({"watchedAt" = "DESC"})
      */
     private $reviews;
 

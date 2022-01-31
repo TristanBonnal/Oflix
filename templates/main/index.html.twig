@@ -19,7 +19,7 @@
             <h2 class="text-center text-muted fw-bold mb-4">Les genres</h2>
             <ul class="d-flex flex-column flex-wrap list-unstyled justify-content-center">
                 {% for genre in genres %}
-                    <li class="btn btn-sm btn-outline-danger mx-1 mb-2">{{genre.name}}</li>
+                    <li class="btn btn-sm btn-outline-danger mx-1 mb-2"><a href="{{path('genre', {id: genre.id})}}">{{genre.name}}</a></li>
                 {% endfor %}
             </ul>
         </div>
