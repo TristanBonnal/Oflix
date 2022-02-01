@@ -28,7 +28,8 @@ class MovieType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('duration', NumberType::class, [
-                'label' => 'Durée du film'
+                'label' => 'Durée du film',
+                'invalid_message' => 'Entrez un nombre valide'
             ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Format',
@@ -42,7 +43,8 @@ class MovieType extends AbstractType
                 'label' => 'Résumé'
             ])
             ->add('rating', NumberType::class, [
-                'label' => 'Note'
+                'label' => 'Note',
+                'scale' => 1,
             ])
             ->add('poster', TextareaType::class)
             ->add('genres', EntityType::class, [

@@ -3,28 +3,30 @@
 {% block title %}Season{% endblock %}
 
 {% block body %}
-    <h1>Season</h1>
+    <div class="container bg-lighttt pt-5">
+        <h1>Season</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ season.id }}</td>
-            </tr>
-            <tr>
-                <th>Number</th>
-                <td>{{ season.number }}</td>
-            </tr>
-            <tr>
-                <th>EpisodesNumber</th>
-                <td>{{ season.episodesNumber }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ season.id }}</td>
+                </tr>
+                <tr>
+                    <th>N° saison</th>
+                    <td>{{ season.number }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre d'épisodes</th>
+                    <td>{{ season.episodesNumber }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mb-3">
+            <a href="{{ path('back_season_index') }} " class="btn btn-outline-dark"><i class="bi bi-arrow-return-left"></i> Retour à la liste</a>
+            <a href="{{ path('back_season_edit', {'id': season.id}) }}" class="btn btn-dark"><i class="bi bi-pencil"></i> Modifier</a>
+        </div>
 
-    <a href="{{ path('back_season_index') }}">back to list</a>
-
-    <a href="{{ path('back_season_edit', {'id': season.id}) }}">edit</a>
-
-    {{ include('back/season/_delete_form.html.twig') }}
+        {{ include('back/season/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

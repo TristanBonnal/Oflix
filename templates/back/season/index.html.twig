@@ -1,39 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Season index{% endblock %}
+{% block title %}Liste saisons{% endblock %}
 
 {% block body %}
-    <h1>Season index</h1>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Série</th>
-                <th>N° saison</th>
-                <th>Nombre d'épisodes</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for season in seasons %}
-            <tr>
-                <td>{{ season.id }}</td>
-                <td>{{ season.movie.title }}</td>
-                <td>{{ season.number }}</td>
-                <td>{{ season.episodesNumber }}</td>
-                <td>
-                    <a href="{{ path('back_season_show', {'id': season.id}) }}">show</a>
-                    <a href="{{ path('back_season_edit', {'id': season.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
+    <div class="container bg-lighttt pt-3">
+        <h1>Liste saisons</h1>
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success my-2">
+                {{ message }}
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
+         <a href="{{ path('back_season_new') }}" class="btn btn-warning"><i class="bi bi-file-plus">  Ajouter une saison</i></a>
 
-    <a href="{{ path('back_season_new') }}">Create new</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Série</th>
+                    <th>N° saison</th>
+                    <th>Nombre d'épisodes</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for season in seasons %}
+                <tr>
+                    <td>{{ season.id }}</td>
+                    <td>{{ season.movie.title }}</td>
+                    <td>{{ season.number }}</td>
+                    <td>{{ season.episodesNumber }}</td>
+                    <td><a href="{{ path('back_season_show', {'id': season.id}) }}" class="btn btn-outline-dark"><i class="bi bi-eye"> Voir</i></a></td>
+                    <td><a href="{{ path('back_season_edit', {'id': season.id}) }}" class="btn btn-outline-danger"><i class="bi bi-pencil"> Editer</i></a></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucune saison trouvée</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 {% endblock %}

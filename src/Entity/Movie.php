@@ -35,6 +35,7 @@ class Movie
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message = "Veuillez renseigner une durée")
+     * @Assert\Positive(message = "Veuillez renseigner un nombre positif")
      */
     private $duration;
 
@@ -56,6 +57,11 @@ class Movie
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 5,
+     *      notInRangeMessage = "Entrez une valeur entre 0 et 5",
+     * )
      */
     private $rating;
 
