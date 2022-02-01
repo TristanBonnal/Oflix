@@ -2,8 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Actor;
 use App\Entity\Casting;
+use App\Entity\Movie;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,10 +18,28 @@ class CastingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('role')
-            ->add('creditOrder')
-            ->add('actor')
-            ->add('movie')
+            ->add('role', TextType::class, [
+                'label' => 'Rôle'
+            ])
+            ->add('creditOrder', IntegerType::class, [
+                'label' => 'Ordre d\'apparition', 
+                'attr' => [
+                    'min' => 0
+                ]
+            ])
+            ->add('actor', EntityType::class, [
+                'label' => 'Acteur',
+                'class' => Actor::class,
+                'choice_label' => function(Actor $actor) {
+                    return $actor->getFirstname() . ' ' . $actor->getLastname();
+                }
+                
+            ])
+            ->add('movie', EntityType::class, [
+                'label' => 'Film/Série',
+                'class' => Movie::class, 
+                'choice_label' => 'title'
+            ])
         ;
     }
 
