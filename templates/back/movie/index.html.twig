@@ -5,6 +5,12 @@
 {% block body %}
     <div class="container bg-lighttt pt-3">
         <h1>Liste des films</h1>
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
 
         <a href="{{ path('back_movie_new') }}" class="btn btn-warning"><i class="bi bi-file-plus">  Ajouter un film</i></a>
 
