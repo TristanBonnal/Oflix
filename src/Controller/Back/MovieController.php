@@ -87,7 +87,7 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="back_movie_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="back_movie_delete", methods={"POST"})
      */
     public function delete(Request $request, Movie $movie, EntityManagerInterface $entityManager): Response
     {

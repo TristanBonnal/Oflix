@@ -31,7 +31,7 @@ class ReviewController extends AbstractController
             $manager->persist($review);
             $manager->flush();
 
-            return $this->redirectToRoute('movie@', ['id' => $movie->getId()]);
+            return $this->redirectToRoute('movie', ['id' => $movie->getId()]);
         }
 
             

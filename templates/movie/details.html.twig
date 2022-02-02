@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- main -->
+    <div class="container bg-lighttt pt-5">
+        <div class="row mb-2">
+            <div class="col">
+                <div
+                    class="row g-0 borderrr rrrounded overflow-hidden flex-md-row align-items-start mb-4 shadow-smmm position-relative">
+                    <div class="col-4 movie__poster img-thumbnail">
+                        <img src="{{movie.poster}}" class="img-fluid">
+                    </div>
+
+                    <div class="col-8 p-4 d-flex flex-column position-static bg-light">
+                        <a href="" class="movie__favorite fs-1 my-2 mx-3 link-danger"><i class="bi bi-bookmark-plus"></i></a>
+                        <strong class="d-inline-block mb-2 text-primary">{{movie.type}}</strong>
+                        <h3 class="mb-1">{{movie.title}}</h3>
+                        <div class="mb-1 text-muted">{{movie.duration}} min</div>
+                        <p>
+                            {% for genre in movie.genres %}
+                                <span class="badge bg-warning text-dark">{{ genre.name }}</span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{movie.synopsis}}
+                        </p>
+                        <div class="d-flex mb-4" style="color: orange;">
+                            {% for i in range(0, 4) %}
+                                {% if movie.rating - i > 0.71 %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% elseif movie.rating - i < 0.29 %}
+                                    <i class="bi bi-star"></i>
+                                {% else %}
+                                    <i class="bi bi-star-half"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ps-1">{{movie.rating}}</span>
+                        </div>
+
+                        <h2>3 Saisons</h2>
+                            <ul class="list-unstyled">
+                            {% for season in movie.seasons %}
+                                <li><span class="badge bg-danger fs-6 mb-2">Saison {{ season.number }}</span> <small class="ms-1">({{ season.episodesNumber }} épisodes)</small></li>
+                            {% endfor %}
+                        </ul>
+
+                        <dl class="row">
+                            <dt class="col-sm-12">Avec</dt>
+                            <dd class="col-sm-12">
+                            {% for casting in castings %}
+                                {{casting.actor.firstname}} {{casting.actor.lastname}} ({{casting.role}})<br>
+                            {% else %}
+                            Pas d'acteurs
+                            {% endfor %}
+                            </dd>
+                            <dt class="col-sm-12">Pays</dt>
+                            <dd class="col-sm-12">USA</dd>
+                            <dt class="col-sm-12">Année</dt>
+                            <dd class="col-sm-12">{{movie.releasedate|date('Y')}}</dd>
+                        </dl>
+                        <div>
+                            <a href="{{path('review_new', {id: movie.id})}}" class="btn btn-warning">Ajouter une critique</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                <h3>Avis Spectateurs</h3>
+                {% for review in movie.reviews %}
+                    <div class="card my-3">
+                        <div class="card-header">
+                            {{review.username}} 
+                            <small>visioné le {{review.watchedAt|date('d/m/Y')}}</small>
+                            <div class="d-flex" style="color: orange;">
+                                {% for i in range(0, 4) %}
+                                    {% if review.rating - i > 0.71 %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% elseif review.rating - i < 0.29 %}
+                                        <i class="bi bi-star"></i>
+                                    {% else %}
+                                        <i class="bi bi-star-half"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ps-1">{{review.rating}}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{review.content}}</p>
+                            <div>
+                                <h6><em>Réactions/émotions</em></h6>
+                                <ul>
+                                    {% for reaction in review.reactions %}
+                                        <li>{{reaction}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
