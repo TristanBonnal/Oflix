@@ -137,8 +137,31 @@ class AppFixtures extends Fixture
                 'ROLE_ADMIN',
                 ''
             ];
+            $user = new User;
+            $user
+                ->setEmail('user@user.com')
+                ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
+                ->setRoles([])
+            ;
+            $manager->persist($user);
 
-            for ($i = 1; $i <= 10; $i++) {
+            $user = new User;
+            $user
+                ->setEmail('manager@manager.com')
+                ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
+                ->setRoles(['ROLE_MANAGER'])
+            ;
+            $manager->persist($user);
+            
+            $user = new User;
+            $user
+                ->setEmail('admin@admin.com')
+                ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
+                ->setRoles(['ROLE_ADMIN'])
+            ;
+            $manager->persist($user);
+
+            for ($i = 1; $i <= 3; $i++) {
                 $user = new User;
                 $user
                     ->setEmail($faker->email())

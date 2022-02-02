@@ -49,16 +49,19 @@
                     </li>
                 </ul>
                 {% if app.user %}
+                {% set role = 'ROLE_ADMIN' in app.user.roles ? 'Admin' : 'ROLE_MANAGER' in app.user.roles ? 'Manager' : 'Membre'%}
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown">
-                                <span>{{ app.user.email }}</span>
+                                <span>{{ app.user.email }} ({{ role }})</span>
                                 <i class="bi bi-person-square"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Profil</a></li>
-                                <li><a class="dropdown-item" href="{{ path('back_movie_index') }}">Backoffice</a></li>
+                                {% if role == 'Admin' or role == 'Manager' %}
+                                    <li><a class="dropdown-item" href="{{ path('back_main') }}">Backoffice</a></li>
+                                {% endif %}
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -67,7 +70,8 @@
                         </li>
                     </ul>
                 {% else %}
-                    <a href="{{ path('app_login')}}" type="button" class="btn btn-danger me-2">Connexion</a>
+                    <span class="text-secondary mx-3">(Visiteur)</span>
+                    <a href="{{ path('app_login')}}" type="button" class="btn btn-danger me-2">Connexion</a> 
                 {% endif %}
 
                 <form class="d-flex" action="list.html">
