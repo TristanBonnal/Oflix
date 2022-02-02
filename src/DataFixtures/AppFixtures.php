@@ -8,6 +8,7 @@ use App\Entity\Casting;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Season;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
@@ -129,6 +130,23 @@ class AppFixtures extends Fixture
 
                 $manager->persist($newMovie);
             }
+
+            //User
+            $roles = [
+                'ROLE_MANAGER',
+                'ROLE_ADMIN',
+                ''
+            ];
+
+            for ($i = 1; $i <= 10; $i++) {
+                $user = new User;
+                $user
+                    ->setEmail($faker->email())
+                    ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
+                    ->setRoles([$roles[mt_rand(0, 2)]])
+                ;
+                $manager->persist($user);
+            }    
 
         $manager->flush();
     }
