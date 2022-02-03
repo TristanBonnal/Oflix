@@ -13,14 +13,17 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
     private $connexion;
+    private $passwordHasher;
 
-    public function __construct(Connection $connexion)
+    public function __construct(Connection $connexion, UserPasswordHasherInterface $passwordHasher)
     {
         $this->connexion = $connexion;
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function truncate()
@@ -36,6 +39,7 @@ class AppFixtures extends Fixture
         $this->connexion->executeQuery('TRUNCATE TABLE movie_genre');
         $this->connexion->executeQuery('TRUNCATE TABLE actor');
         $this->connexion->executeQuery('TRUNCATE TABLE season');
+        $this->connexion->executeQuery('TRUNCATE TABLE user');
 
     }
 
@@ -132,44 +136,35 @@ class AppFixtures extends Fixture
             }
 
             //User
-            $roles = [
-                'ROLE_MANAGER',
-                'ROLE_ADMIN',
-                ''
+
+            $users = [
+                [
+                    'login' => 'admin@admin.com',
+                    'password' => 'admin',
+                    'roles' => 'ROLE_ADMIN',
+                ],
+                [
+                    'login' => 'manager@manager.com',
+                    'password' => 'manager',
+                    'roles' => 'ROLE_MANAGER',
+                ],
+                [
+                    'login' => 'user@user.com',
+                    'password' => 'user',
+                    'roles' => 'ROLE_USER',
+                ],
             ];
-            $user = new User;
-            $user
-                ->setEmail('user@user.com')
-                ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
-                ->setRoles([])
-            ;
-            $manager->persist($user);
 
-            $user = new User;
-            $user
-                ->setEmail('manager@manager.com')
-                ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
-                ->setRoles(['ROLE_MANAGER'])
-            ;
-            $manager->persist($user);
-            
-            $user = new User;
-            $user
-                ->setEmail('admin@admin.com')
-                ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
-                ->setRoles(['ROLE_ADMIN'])
-            ;
-            $manager->persist($user);
-
-            for ($i = 1; $i <= 3; $i++) {
-                $user = new User;
-                $user
-                    ->setEmail($faker->email())
-                    ->setPassword('$2y$13$drx3lHh7Axk0rBs8TcqoGORvIdZCEBsCmO4yjTJQQdf1V0kAtAZ2i')
-                    ->setRoles([$roles[mt_rand(0, 2)]])
+            foreach ($users as $user) {
+                $newUser = new User;
+                $newUser
+                    ->setEmail($user['login'])
+                    ->setPassword($this->passwordHasher->hashPassword($newUser, $user['password']))
+                    ->setRoles([$user['roles']])
                 ;
-                $manager->persist($user);
-            }    
+                $manager->persist($newUser);
+
+            }  
 
         $manager->flush();
     }
