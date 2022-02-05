@@ -14,18 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class MovieController extends AbstractController
 {
     /**
-     * @Route("/movie/{id}", name="movie", requirements={"id": "\d+"})
+     * @Route("/movie/{slug}", name="movie")
      */
-    public function show(MovieRepository $movieRepo, CastingRepository $castingRepo, int $id): Response
+    public function show(MovieRepository $movieRepo, $slug, Movie $movie): Response
     {
-        $movie = $movieRepo->find($id);
-        $castings = $castingRepo->findBy(['movie' => $id], ['creditOrder' => 'DESC']);
-
-
         return $this->render('movie/details.html.twig', [
             'title' => $movie->getTitle(),
             'movie' => $movie,
-            'castings' => $castings
+            'castings' => $movie->getCastings()
         ]);
     }
 

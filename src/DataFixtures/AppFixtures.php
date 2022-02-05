@@ -14,16 +14,18 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     private $connexion;
     private $passwordHasher;
 
-    public function __construct(Connection $connexion, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(Connection $connexion, UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger)
     {
         $this->connexion = $connexion;
         $this->passwordHasher = $passwordHasher;
+        $this->slugger = $slugger;
     }
 
     public function truncate()
@@ -95,6 +97,8 @@ class AppFixtures extends Fixture
             $newMovie->setSummary($faker->paragraph(1));
             $newMovie->setSynopsis($faker->paragraph(3));
             $newMovie->setPoster('https://picsum.photos/id/'.mt_rand(1, 100).'/303/424');
+            $newMovie->setSlug($this->slugger->slug($newMovie->getTitle()));
+            ;
 
             //Addgenres
             $nbGenres = rand(0,3);
