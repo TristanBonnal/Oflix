@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Genre;
 use App\Entity\Movie;
-use Doctrine\DBAL\Types\FloatType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,7 +27,7 @@ class MovieType extends AbstractType
                 'label' => 'Date de sortie',
                 'widget' => 'single_text',
             ])
-            ->add('duration', NumberType::class, [
+            ->add('duration', IntegerType::class, [
                 'label' => 'Durée du film',
                 'invalid_message' => 'Entrez un nombre valide'
             ])
@@ -42,9 +42,12 @@ class MovieType extends AbstractType
             ->add('summary', TextareaType::class, [
                 'label' => 'Résumé'
             ])
-            ->add('rating', NumberType::class, [
+            ->add('rating', IntegerType::class, [
                 'label' => 'Note',
-                'scale' => 1,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 5
+                ]
             ])
             ->add('poster', TextareaType::class)
             ->add('genres', EntityType::class, [
