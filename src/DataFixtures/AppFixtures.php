@@ -9,19 +9,19 @@ use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Season;
 use App\Entity\User;
+use App\Service\MySlugger;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     private $connexion;
     private $passwordHasher;
 
-    public function __construct(Connection $connexion, UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger)
+    public function __construct(Connection $connexion, UserPasswordHasherInterface $passwordHasher, MySlugger $slugger)
     {
         $this->connexion = $connexion;
         $this->passwordHasher = $passwordHasher;
@@ -97,7 +97,7 @@ class AppFixtures extends Fixture
             $newMovie->setSummary($faker->paragraph(1));
             $newMovie->setSynopsis($faker->paragraph(3));
             $newMovie->setPoster('https://picsum.photos/id/'.mt_rand(1, 100).'/303/424');
-            $newMovie->setSlug($this->slugger->slug($newMovie->getTitle())->lower());
+            $newMovie->setSlug($this->slugger->sluggify($newMovie->getTitle()));
             ;
 
             //Addgenres

@@ -6,6 +6,7 @@
 parameters:
     app.lower_slug: true
 
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -26,5 +27,14 @@ services:
         arguments: 
             $toLower: '%app.lower_slug%'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+
+when@dev:
+    parameters:
+        app.lower_slug: false
+    
+    services:
+        App\Service\MySlugger:
+            arguments: 
+                $toLower: '%app.lower_slug%'
+
+
