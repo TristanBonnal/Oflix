@@ -97,7 +97,7 @@ class AppFixtures extends Fixture
             $newMovie->setSummary($faker->paragraph(1));
             $newMovie->setSynopsis($faker->paragraph(3));
             $newMovie->setPoster('https://picsum.photos/id/'.mt_rand(1, 100).'/303/424');
-            $newMovie->setSlug($this->slugger->slug($newMovie->getTitle()));
+            $newMovie->setSlug($this->slugger->slug($newMovie->getTitle())->lower());
             ;
 
             //Addgenres
