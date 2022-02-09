@@ -64,6 +64,24 @@ class MovieRepository extends ServiceEntityRepository
         return $resultats;
     }
 
+    public function findRandomMovie()
+    {
+        // ni le repository, ni le manage savent faire du SQL
+        // on descend donc d'un cran
+        // pour all
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT title, slug FROM movie
+            ORDER BY RAND()
+            LIMIT 1
+            ';
+        $results = $conn->executeQuery($sql);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $results->fetchAssociative();
+    }
+
     // /**
     //  * @return Movie[] Returns an array of Movie objects
     //  */
