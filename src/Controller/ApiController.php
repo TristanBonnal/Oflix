@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Actor;
 use App\Entity\Genre;
 use App\Models\Movies;
 use App\Repository\GenreRepository;
@@ -65,6 +66,19 @@ class ApiController extends AbstractController
     {
         return $this->json(
             $repo->findRandomMovie(),
+            200,
+            [],
+            ['groups'=> 'list_movie']
+        );
+    }
+
+    /**
+     * @Route("/api/actor/{id}/movies", name="api_list_movies_by_actor")
+     */
+    public function moviesByActor(MovieRepository $repo, Actor $actor): Response
+    {
+        return $this->json(
+            $repo->findMovieByActor($actor),
             200,
             [],
             ['groups'=> 'list_movie']

@@ -19,6 +19,7 @@ class Movie
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"list_movie"})
      */
     private $id;
 
