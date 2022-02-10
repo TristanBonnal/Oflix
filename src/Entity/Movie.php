@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Movie
 {
@@ -23,12 +25,14 @@ class Movie
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message = "Veuillez renseigner un titre")
+     * @Groups({"list_movie", "list_genre"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="date")
      * @Assert\NotNull(message = "Veuillez renseigner une date")
+     * @Groups({"list_movie"})
      */
     private $release_date;
 
@@ -42,11 +46,14 @@ class Movie
     /**
      * @ORM\Column(type="string", length=25)
      * @Assert\NotBlank
+     * @Groups({"list_movie"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"list_movie"})
+     * 
      */
     private $synopsis;
 
@@ -62,11 +69,13 @@ class Movie
      *      max = 5,
      *      notInRangeMessage = "Entrez une valeur entre 0 et 5",
      * )
+     * @Groups({"list_movie"})
      */
     private $rating;
 
     /**
      * @ORM\Column(type="text")
+     * 
      */
     private $poster;
 
@@ -77,6 +86,7 @@ class Movie
 
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
+     * @Groups({"list_movie"})
      */
     private $genres;
 
@@ -96,6 +106,11 @@ class Movie
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
 
 
@@ -333,6 +348,27 @@ class Movie
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setValuesOnPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTime('now');
+        // et autre ...
     }
 
 

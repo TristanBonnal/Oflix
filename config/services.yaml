@@ -34,9 +34,32 @@ services:
         arguments: 
             $maintenance: '%app.maintenance%'
 
+    App\EventListener\MovieListener:
+        tags:
+            -
+                # le nom du type d'évènement, 
+                name: doctrine.orm.entity_listener
+                event: preUpdate
+                entity: App\Entity\Movie
+                # entity_manager attribute is optional
+                entity_manager: custom
+                # method attribute is optional
+                method: updateSlug
+
+            -
+                # le nom du type d'évènement, dans notre cas, un évènement doctrine entity listener
+                name: doctrine.orm.entity_listener
+                # le nom de l'event : avant création
+                event: prePersist
+                # l'entity sur laquelle on veut être notifier
+                entity: App\Entity\Movie
+                # method attribute is optional
+                method: updateSlug
+
+                
 # when@dev:
 #     parameters:
-#         app.lower_slug: false    //ceci fonctionne
+#         app.lower_slug: false    
     
 
 
