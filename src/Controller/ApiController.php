@@ -51,7 +51,7 @@ class ApiController extends AbstractController
     public function moviesByGenre(MovieRepository $repo, Genre $genre): Response
     {
         return $this->json(
-            $repo->findBy(['genres' => $genre]),
+            $repo->findMovieByGenre($genre),
             200,
             [],
             ['groups'=> 'list_genre']

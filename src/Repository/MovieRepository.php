@@ -85,7 +85,11 @@ class MovieRepository extends ServiceEntityRepository
 
     public function findMovieByGenre(Genre $genre)
     {
-  
+        return $this->createQueryBuilder('m')
+        ->innerJoin('m.genres', 'g')
+        ->where('g.id = :genre_id')
+        ->setParameter('genre_id', $genre->getId())
+        ->getQuery()->getResult();
     }
 
 }
