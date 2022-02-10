@@ -95,17 +95,6 @@ class MovieRepository extends ServiceEntityRepository
 
     public function findMovieByActor(Actor $actor)
     {
-        // $conn = $this->getEntityManager()->getConnection();
-
-        // $sql = '
-        //     SELECT m* FROM movie m
-        //     JOIN casting c
-        //     ON m.id = c.actor_id
-        //     WHERE c.actor_id = :actor
-        //     ';
-        // $results = $conn->executeQuery($sql);
-
-        // return $results->fetchAssociative();
         return $this->createQueryBuilder('m')
         ->innerJoin('m.castings', 'c')
         ->where('c.actor = :actor')
