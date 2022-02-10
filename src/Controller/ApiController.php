@@ -46,7 +46,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/genre/{id}/movies", name="api_list_genres")
+     * @Route("/api/genre/{id}/movies", name="api_list_movies_by_genre")
      */
     public function moviesByGenre(MovieRepository $repo, Genre $genre): Response
     {
@@ -54,7 +54,20 @@ class ApiController extends AbstractController
             $repo->findMovieByGenre($genre),
             200,
             [],
-            ['groups'=> 'list_genre']
+            ['groups'=> 'list_movie']
+        );
+    }
+
+    /**
+     * @Route("/api/movie/random", name="api_movie_random")
+     */
+    public function randomMovie(MovieRepository $repo): Response
+    {
+        return $this->json(
+            $repo->findRandomMovie(),
+            200,
+            [],
+            ['groups'=> 'list_movie']
         );
     }
 }

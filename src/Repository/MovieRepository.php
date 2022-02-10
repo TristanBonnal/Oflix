@@ -73,7 +73,7 @@ class MovieRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
-            SELECT title, slug FROM movie
+            SELECT *, slug FROM movie
             ORDER BY RAND()
             LIMIT 1
             ';
