@@ -4,27 +4,30 @@ namespace App\Controller;
 
 use App\Entity\Actor;
 use App\Entity\Genre;
+use App\Entity\Movie;
 use App\Models\Movies;
 use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ApiController extends AbstractController
 {
     /**
-     * @Route("/api/movies", name="api_list_movies")
+     * @Route("/api/movies", name="api_list_movies", methods={"GET"})
      */
     public function list(MovieRepository $movieRepository): Response
     {
         // on renvoit une réponse de type JsonResponse
-        // c'est la même chose que Response, en plus spécifique
-        // car ça rajoute le contentType dans les headers
         return $this->json(
-            // les données à transformer en JSON
             $movieRepository->findAll(),
-            // HTTP STATUS CODE
             200,
             // HTTP headers supplémentaires, dans notre cas : aucune
             [],
@@ -47,12 +50,12 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/genre/{id}/movies", name="api_list_movies_by_genre")
+     * @Route("/api/genres/{id}/movies", name="api_list_movies_by_genre")
      */
-    public function moviesByGenre(MovieRepository $repo, Genre $genre): Response
+    public function moviesByGenre(Genre $genre): Response
     {
         return $this->json(
-            $repo->findMovieByGenre($genre),
+            $genre->getMovies(),
             200,
             [],
             ['groups'=> 'list_movie']
@@ -60,7 +63,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/movie/random", name="api_movie_random")
+     * @Route("/api/movies/random", name="api_movie_random")
      */
     public function randomMovie(MovieRepository $repo): Response
     {
@@ -72,16 +75,39 @@ class ApiController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/api/actor/{id}/movies", name="api_list_movies_by_actor")
+     /**
+     * @Route("/api/movies", name="api_movies_create", methods={"POST"})
      */
-    public function moviesByActor(MovieRepository $repo, Actor $actor): Response
+    public function createMovie(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator) : Response
     {
+        //Récupération du corps de la requete
+        $data = $request->getContent();
+
+        //Conversion JSON en objet Movie
+        try {
+            $newMovie =  $serializer->deserialize($data, Movie::class, 'json');
+        } catch (Exception $e) {
+            return new JsonResponse('JSON Invalide', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+     
+        //Validation avant insertion
+        $errors = $validator->validate($newMovie);
+        if (count($errors) > 0) {
+            $errorsString = (string) $errors;
+            return new JsonResponse($errorsString, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        $doctrine->persist($newMovie);
+        $doctrine->flush();
         return $this->json(
-            $repo->findMovieByActor($actor),
-            200,
+            $newMovie,
+            Response::HTTP_CREATED,
             [],
-            ['groups'=> 'list_movie']
+            ['groups' => ['list_movie']]
         );
     }
-}
+} 
+
+
+
+

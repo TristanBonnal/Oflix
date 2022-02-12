@@ -87,6 +87,7 @@ class Movie
 
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
+     * @Assert\Count(min=1) 
      * @Groups({"list_movie"})
      */
     private $genres;
