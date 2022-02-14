@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -24,12 +25,19 @@ class Genre
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"list_genre", "list_movie"})
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Your genre name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your genre name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Movie::class, mappedBy="genres")
      * @Groups({"list_genre"})
+
      */
     private $movies;
 

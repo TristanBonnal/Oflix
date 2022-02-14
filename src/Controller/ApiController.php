@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Actor;
 use App\Entity\Genre;
 use App\Entity\Movie;
+use App\Models\JsonError;
 use App\Models\Movies;
 use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
@@ -37,7 +38,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/genres", name="api_list_genres")
+     * @Route("/api/genres", name="api_list_genres", methods={"GET"})
      */
     public function listGenres(GenreRepository $genreRepository): Response
     {
@@ -52,8 +53,12 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/genres/{id}/movies", name="api_list_movies_by_genre")
      */
-    public function moviesByGenre(Genre $genre): Response
+    public function moviesByGenre(Genre $genre = null): Response
     {
+        if (!$genre) {
+            $error = new JsonError(Response::HTTP_NOT_FOUND, 'Genre non trouvé');
+            return $this->json($error, $error->getError());
+        }
         return $this->json(
             $genre->getMovies(),
             200,
@@ -87,14 +92,16 @@ class ApiController extends AbstractController
         try {
             $newMovie =  $serializer->deserialize($data, Movie::class, 'json');
         } catch (Exception $e) {
+            
             return new JsonResponse('JSON Invalide', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
      
         //Validation avant insertion
         $errors = $validator->validate($newMovie);
         if (count($errors) > 0) {
-            $errorsString = (string) $errors;
-            return new JsonResponse($errorsString, Response::HTTP_UNPROCESSABLE_ENTITY);
+            $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
+            $myJsonError->setValidationErrors($errors);
+            return new JsonResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         
         $doctrine->persist($newMovie);
@@ -104,6 +111,45 @@ class ApiController extends AbstractController
             Response::HTTP_CREATED,
             [],
             ['groups' => ['list_movie']]
+        );
+    }
+
+    
+    /**
+     * @Route("/api/secure/genres", name="api_genres_create", methods={"POST"})
+     * @link https://symfony.com/doc/current/validation.html#using-the-validator-service
+     */
+    public function createGenre(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    {
+        $data = $request->getContent();
+        try { 
+            $newgenre =  $serializer->deserialize($data, Genre::class, 'json');
+        } catch (Exception $e){ 
+
+            return new JsonResponse("Hoouuu !! Ce qui vient d'arriver est de votre faute : JSON invalide", Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        //@link : https://symfony.com/doc/current/validation.html#using-the-validator-service
+        $errors = $validator->validate($newgenre);
+        if (count($errors) > 0) {
+            //dd($errors);
+            $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
+            $myJsonError->setValidationErrors($errors);
+
+
+            //$errorsString = (string) $errors;
+    
+            return $this->json($myJsonError, $myJsonError->getError());
+        }
+        
+        $doctrine->persist($newgenre);
+        $doctrine->flush();
+
+        return $this->json(
+            $newgenre,
+            Response::HTTP_CREATED,
+            [],
+            ['groups' => ['show_genre']]
         );
     }
 } 
