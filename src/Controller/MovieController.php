@@ -31,7 +31,6 @@ class MovieController extends AbstractController
     public function showAll(MovieRepository $movieRepos): Response
     {
         $movies = $movieRepos->findAll();
-        dump($movies);
 
 
         return $this->render('movie/list.html.twig', [

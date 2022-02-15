@@ -23,7 +23,7 @@ class MaintenanceSubscriber implements EventSubscriberInterface
 
         if ($this->maintenance) {
             $content = $event->getResponse()->getContent();
-            dump($content);
+            // dump($content);
             $newContent = str_replace(
                 '<body>', 
                 '<body><div class="alert alert-danger">Maintenance prévue mercredi 15 février à 17h00</div>',
