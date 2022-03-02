@@ -561,7 +561,7 @@ Pour accéder au visu, `localhost:8080/_error/404`
 
   - Cloner son projet (pour avoir le lien : `git remote -v`) puis `git clone git@github.com:O-clock-Yuna/oflix-MartinFerret.git`
 
-  - Faire un `composer install`
+  - Se placer dans le dossier et faire un `composer install`
 
   - Creer et éditer le fichier `.env.local` en lancant `sudo nano .env.local` et copier le lien de Database (CTRL + 0, Entrée, CTRL + X)
 
@@ -571,7 +571,7 @@ Pour accéder au visu, `localhost:8080/_error/404`
 
   - Lancer les fixtures
 
-  - Lancer `composer require symfony/apache-pack` pour creer le fichier htaccess
+  - Lancer `composer require symfony/apache-pack` pour creer le fichier htaccess, répondre yes pour les recipes
 
     - Si problème dans les liens = problème htaccess, lancer :
 
