@@ -53,7 +53,7 @@ class MovieSluggifyCommand extends Command
 
         $this->entityManager->flush();
 
-        $io->info('déjà terminé ! tu peux prendre la porte à gauche...');
+        $io->info('déjà terminé !');
         return Command::SUCCESS;
     }
 }

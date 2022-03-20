@@ -37,7 +37,7 @@ class MainController extends AbstractController
      *
      * @return Response
      */
-    public function themeSwitcher(SessionInterface $session, Request $request): Response
+    public function themeSwitcher(SessionInterface $session): Response
     {
 
         $theme = $session->get('theme', 'netflix');
@@ -48,9 +48,6 @@ class MainController extends AbstractController
             $session->set('theme', 'netflix');
         }
         
-        // $routeName = $request->getCurrentRequest();
-        // dd($routeName);
-        // TODO UX redirect vers la page courante
         return $this->redirectToRoute("main_home");
 
     }
